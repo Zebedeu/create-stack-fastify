@@ -83,8 +83,18 @@ const constantsTargetPath = path.join(projectName, "src", "config", "constants.t
 if (fs.existsSync(constantsTemplatePath)) {
   fs.copyFileSync(constantsTemplatePath, constantsTargetPath);
 } else {
-  fs.writeFileSync(dbConnectionTargetPath, "// db-connection.ts vazio\n");
-  console.warn("Aviso: template/db-connection.ts não encontrado. Criado arquivo vazio.");
+  fs.writeFileSync(constantsTemplatePath, "// constants.ts vazio\n");
+  console.warn("Aviso: template/constants.ts não encontrado. Criado arquivo vazio.");
+}
+
+  const tsconfigTemplatePath = path.join(__dirname, "template", "tsconfig.json");
+const tsconfigTargetPath = path.join(projectName, ".", "tsconfig.json");
+
+if (fs.existsSync(tsconfigTemplatePath)) {
+  fs.copyFileSync(tsconfigTemplatePath, tsconfigTargetPath);
+} else {
+  fs.writeFileSync(tsconfigTemplatePath, "// tsconfig.ts vazio\n");
+  console.warn("Aviso: template/constants.ts não encontrado. Criado arquivo vazio.");
 }
    if (fs.existsSync(appTsTemplate)) {
     fs.copyFileSync(appTsTemplate, appTsTarget);
@@ -155,6 +165,7 @@ app.listen();
   console.log(`Para começar:`);
   console.log(`  cd ${projectName}`);
   console.log(`  npm run dev\n`);
+  consosle.log("http://127.0.0.1:3021/healthcheck");
 }
 
 main();

@@ -48,6 +48,7 @@
     "mysql2": "^3.14.0",
     "nodemailer": "^6.10.0",
     "nodemailer-sparkpost-transport": "^2.2.0",
+    "pino-pretty": "^13.0.0",
     "pg": "^8.14.1",
     "puppeteer": "^24.6.1",
     "reflect-metadata": "^0.2.2",
