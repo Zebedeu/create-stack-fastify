@@ -1,0 +1,24 @@
+{
+  "name": "create-stack-fastify",
+  "version": "0.0.1-beta.4",
+  "description": "Gerador de projetos Fastify com TypeScript, Prisma, GraphQL e mais",
+  "bin": {
+    "create-stack-fastify": "./init.js"
+  },
+  "files": [
+    "init.js",
+    "template/**"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zebedeu/create-stack-fastify.git"
+  },
+  "author": "Márcio Zebedeu",
+  "bugs": {
+    "url": "https://github.com/Zebedeu/create-stack-fastify/issues"
+  },
+  "homepage": "https://github.com/Zebedeu/create-stack-fastify#readme"
+}

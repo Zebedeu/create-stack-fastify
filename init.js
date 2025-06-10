@@ -48,9 +48,7 @@ function main() {
   baseDirs.forEach((dir) => mkdir(path.join(projectName, dir)));
   srcDirs.forEach((dir) => mkdir(path.join(projectName, "src", dir)));
   coreDirs.forEach((dir) => mkdir(path.join(projectName, "src", "core", dir)));
-  csaDirs.forEach((dir) =>
-    mkdir(path.join(projectName, "src", "core", dir))
-  );
+  csaDirs.forEach((dir) => mkdir(path.join(projectName, "src", "core", "csa", dir)));
   configDirs.forEach((dir) =>
     mkdir(path.join(projectName, "src", "config", dir))
   );
@@ -61,25 +59,33 @@ function main() {
     mkdir(path.join(projectName, "src", "shared", dir))
   );
 
-  // Copia app.js do template
-  const appJsTemplate = path.join(__dirname, "template", "app.ts");
-  const appJsTarget = path.join(projectName, "src", "app.js");
-  if (fs.existsSync(appJsTemplate)) {
-    fs.copyFileSync(appJsTemplate, appJsTarget);
+  // Garante que a pasta http exista
+  const httpDir = path.join(projectName, "src", "core", "infra", "http");
+  mkdir(httpDir);
+
+  // Copia app.ts do template para src/core/infra/http/app.ts
+  const appTsTemplate = path.join(__dirname, "template", "app.ts");
+  const appTsTarget = path.join(httpDir, "app.ts");
+  if (fs.existsSync(appTsTemplate)) {
+    fs.copyFileSync(appTsTemplate, appTsTarget);
   } else {
-    fs.writeFileSync(appJsTarget, "// Fastify app entry\n");
+    fs.writeFileSync(appTsTarget, "// Fastify app entry\n");
     console.warn(
-      "Aviso: Não foi encontrado template/app.js, criado arquivo vazio."
+      "Aviso: Não foi encontrado template/app.ts, criado arquivo vazio."
     );
   }
 
-  // Cria server.js
+  // Cria server.ts em src/core/infra/http/server.ts
   fs.writeFileSync(
-    path.join(projectName, "src", "server.js"),
+    path.join(httpDir, "server.ts"),
     `// Fastify server bootstrap
-const app = require('./app');
+import app from './app';
+
 app.listen({ port: 3000 }, (err, address) => {
-  if (err) { app.log.error(err); process.exit(1); }
+  if (err) {
+    app.log.error(err);
+    process.exit(1);
+  }
   app.log.info(\`Server listening on \${address}\`);
 });
 `
@@ -107,27 +113,24 @@ app.listen({ port: 3000 }, (err, address) => {
     console.warn(
       "Aviso: template/packagejson não encontrado. Criando package.json padrão."
     );
-    const defaultPkg = {
+    fs.writeFileSync(packageJsonTargetPath, JSON.stringify({
       name: projectName,
       version: "1.0.0",
-      description: "Projeto gerado com create-stack-fastify",
-      main: "src/server.js",
+      main: "dist/core/infra/http/server.js",
       scripts: {
-        dev: "node src/server.js",
+        dev: "ts-node src/core/infra/http/server.ts",
+        build: "tsc",
+        start: "node dist/core/infra/http/server.js"
       },
-      dependencies: {
-        fastify: "^4.0.0",
-      },
-    };
-    fs.writeFileSync(
-      packageJsonTargetPath,
-      JSON.stringify(defaultPkg, null, 2)
-    );
+      _moduleAliases: {
+        "@core": "dist/core"
+      }
+    }, null, 2));
   }
 
   // Instala dependências
   console.log("Instalando dependências com npm install...");
-  execSync('npm install', { cwd: projectName, stdio: 'inherit' });
+  execSync("npm install", { cwd: projectName, stdio: "inherit" });
   console.log(`Projeto ${projectName} criado e dependências instaladas!`);
   console.log(`Para começar:`);
   console.log(`  cd ${projectName}`);

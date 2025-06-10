@@ -2,10 +2,10 @@
   "name": "{{projectName}}",
   "version": "0.0.1",
   "description": "Projeto gerado com create-stack-fastify",
-  "main": "src/core/infra/server.js",
+  "main": "src/core/infra/server.ts",
   "scripts": {
-    "dev": "node src/core/infra/server.js",
-    "start": "NODE_ENV=production node src/server.js"
+    "dev": "node src/core/infra/server.ts",
+    "start": "NODE_ENV=production node src/server.ts"
   },
   "dependencies": {
     "fastify": "^5.2.1",
@@ -54,7 +54,6 @@
     "shallow-equal-object": "^1.1.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui": "^5.20.1",
-    "types-ddd": "^3.11.1",
     "uuid": "^11.1.0",
     "vary": "^1.1.2"
     },
