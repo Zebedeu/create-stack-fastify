@@ -165,7 +165,7 @@ app.listen();
   console.log(`Para começar:`);
   console.log(`  cd ${projectName}`);
   console.log(`  npm run dev\n`);
-  consosle.log("http://127.0.0.1:3021/healthcheck");
+  console.log("http://127.0.0.1:3021/healthcheck");
 }
 
 main();
