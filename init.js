@@ -66,7 +66,27 @@ function main() {
   // Copia app.ts do template para src/core/infra/http/app.ts
   const appTsTemplate = path.join(__dirname, "template", "app.ts");
   const appTsTarget = path.join(httpDir, "app.ts");
-  if (fs.existsSync(appTsTemplate)) {
+ 
+  const dbConnectionTemplatePath = path.join(__dirname, "template", "db-connection.ts");
+const dbConnectionTargetPath = path.join(projectName, "src", "config", "db-connection.ts");
+
+if (fs.existsSync(dbConnectionTemplatePath)) {
+  fs.copyFileSync(dbConnectionTemplatePath, dbConnectionTargetPath);
+} else {
+  fs.writeFileSync(dbConnectionTargetPath, "// db-connection.ts vazio\n");
+  console.warn("Aviso: template/db-connection.ts não encontrado. Criado arquivo vazio.");
+}
+
+  const constantsTemplatePath = path.join(__dirname, "template", "constants.ts");
+const constantsTargetPath = path.join(projectName, "src", "config", "constants.ts");
+
+if (fs.existsSync(constantsTemplatePath)) {
+  fs.copyFileSync(constantsTemplatePath, constantsTargetPath);
+} else {
+  fs.writeFileSync(dbConnectionTargetPath, "// db-connection.ts vazio\n");
+  console.warn("Aviso: template/db-connection.ts não encontrado. Criado arquivo vazio.");
+}
+   if (fs.existsSync(appTsTemplate)) {
     fs.copyFileSync(appTsTemplate, appTsTarget);
   } else {
     fs.writeFileSync(appTsTarget, "// Fastify app entry\n");
@@ -77,19 +97,19 @@ function main() {
 
   // Cria server.ts em src/core/infra/http/server.ts
   fs.writeFileSync(
-    path.join(httpDir, "server.ts"),
-    `// Fastify server bootstrap
-import app from './app';
+  path.join(projectName, 'src', 'core', 'infra', 'http', 'server.ts'),
+  `import 'module-alias/register';
+import App from './app';
+// Adicione ou importe seus routers e plugins conforme necessário
 
-app.listen({ port: 3000 }, (err, address) => {
-  if (err) {
-    app.log.error(err);
-    process.exit(1);
-  }
-  app.log.info(\`Server listening on \${address}\`);
+const app = new App({
+  plugins: [],
+  routes: [],
 });
+
+app.listen();
 `
-  );
+);
 
   // Cria README.md
   fs.writeFileSync(

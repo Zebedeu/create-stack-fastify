@@ -5,7 +5,7 @@ import csrfProtection from '@fastify/csrf-protection';
 import middie from '@fastify/middie';
 import helmet from '@fastify/helmet';
 import metricsPlugin from 'fastify-metrics';
-import { ID } from 'types-ddd';
+import { randomUUID } from 'crypto';
 const fs = require('fs');
 
 class App {
@@ -57,7 +57,7 @@ class App {
       ignoreTrailingSlash: true,
       requestIdLogLabel: 'trackingId',
       requestIdHeader: 'x-custom-id',
-      genReqId: () => ID.create().toString(),
+      genReqId: () => randomUUID(),
     });
 
     this.app.register(require('@fastify/url-data'), {
@@ -109,7 +109,7 @@ class App {
     this.app.addHook('preHandler', (req, _reply, done) => {
       if (req.body) {
         req.log.info({ body: req.body }, 'parsed body');
-        req.id = ID.create().toString();
+        req.id = randomUUID();
       }
       done();
     });
