@@ -150,7 +150,7 @@ app.listen();
 
   // Instala dependências
   console.log("Instalando dependências com npm install...");
-  execSync("npm install", { cwd: projectName, stdio: "inherit" });
+  execSync("npm install --legacy-peer-deps", { cwd: projectName, stdio: "inherit" });
   console.log(`Projeto ${projectName} criado e dependências instaladas!`);
   console.log(`Para começar:`);
   console.log(`  cd ${projectName}`);
